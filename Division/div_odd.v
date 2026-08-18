@@ -19,16 +19,16 @@ module div_odd #(
 
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
-      cnt <= {CNT_W{1'b0}};
+      cnt <= 0;
     end else begin
-      cnt <= (cnt == CNT_W'(LAST)) ? {CNT_W{1'b0}} : cnt + 1'b1;
+      cnt <= (cnt == LAST) ? 0 : cnt + 1'b1;
     end
   end
 
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
       clk_p <= 1'b0;
-    end else if (cnt == CNT_W'(MID) || cnt == CNT_W'(LAST)) begin
+    end else if (cnt == MID || cnt == LAST) begin
       clk_p <= ~clk_p;
     end
   end
@@ -36,7 +36,7 @@ module div_odd #(
   always @(negedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
       clk_n <= 1'b0;
-    end else if (cnt == CNT_W'(MID) || cnt == CNT_W'(LAST)) begin
+    end else if (cnt == MID || cnt == LAST) begin
       clk_n <= ~clk_n;
     end
   end
