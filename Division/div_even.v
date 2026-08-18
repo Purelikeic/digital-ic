@@ -16,9 +16,9 @@ module div_even #(
 
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
-      cnt <= {CNT_W{1'b0}};
+      cnt <= 0;
     end else if (cnt == HALF - 1) begin
-      cnt <= {CNT_W{1'b0}};
+      cnt <= 0;
     end else begin
       cnt <= cnt + 1'b1;
     end
