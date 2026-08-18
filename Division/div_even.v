@@ -5,24 +5,33 @@ module div_even #(
 )(
   input i_clk,
   input i_rstn,
-  output reg o_clkout
+  output o_clkout
 );
 
   localparam integer HALF  = N / 2;
   localparam integer CNT_W = (HALF <= 1) ? 1 : $clog2(HALF);
 
   reg [CNT_W-1:0] cnt;
+  reg clk_out;
 
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
       cnt <= {CNT_W{1'b0}};
-      o_clkout <= 1'b0;
-    end else if (cnt == CNT_W'(HALF - 1)) begin
+    end else if (cnt == HALF - 1) begin
       cnt <= {CNT_W{1'b0}};
-      o_clkout <= ~o_clkout;
     end else begin
       cnt <= cnt + 1'b1;
     end
   end
+
+  always @(posedge i_clk or negedge i_rstn) begin
+    if (!i_rstn) begin
+      clk_out <= 1'b0;
+    end else if (cnt == HALF - 1) begin
+      clk_out <= ~clk_out;
+    end
+  end
+
+  assign o_clkout = clk_out;
 
 endmodule
