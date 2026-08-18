@@ -25,7 +25,7 @@ module async_fifo #(
   reg [ADDR_W:0] wr_ptr_gray_d1, wr_ptr_gray_d2;
   reg [ADDR_W:0] rd_ptr_gray_d1, rd_ptr_gray_d2;
 
-  reg [DATA_DEPTH-1:0] ram [0:DATA_DEPTH-1];
+  reg [DATA_WIDTH-1:0] ram [0:DATA_DEPTH-1];
   reg [DATA_WIDTH-1:0] rd_data_reg;
 
   wire [ADDR_W:0] wr_ptr_bin_next = wr_ptr_bin + 1'b1;
@@ -63,7 +63,7 @@ module async_fifo #(
 
   // 读域判空, 写域判满 (用同步后的对方指针)
   assign o_empty = (rd_ptr_bin == wr_ptr_bin_sync);
-  assign o_full = (wr_ptr_bin[ADDR_W] != rd_ptr_bin_sync[ADDR_W]) && (wr_addr == rd_addr);
+  assign o_full = (wr_ptr_bin[ADDR_W] != rd_ptr_bin_sync[ADDR_W]) && (wr_addr == rd_ptr_bin_sync[ADDR_W-1:0]);
 
   // 写域: 二进制加减, 送出格雷码
   always @(posedge i_wr_clk or negedge i_wr_rstn) begin
