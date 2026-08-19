@@ -10,6 +10,8 @@ module div_even #(
 
   localparam integer HALF  = N / 2;
   localparam integer CNT_W = (HALF <= 1) ? 1 : $clog2(HALF);
+  localparam integer HALF_LAST_INT = HALF - 1;
+  localparam [CNT_W-1:0] HALF_LAST = HALF_LAST_INT[CNT_W-1:0];
 
   reg [CNT_W-1:0] cnt;
   reg clk_out;
@@ -17,7 +19,7 @@ module div_even #(
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
       cnt <= 0;
-    end else if (cnt == HALF - 1) begin
+    end else if (cnt == HALF_LAST) begin
       cnt <= 0;
     end else begin
       cnt <= cnt + 1'b1;
@@ -27,7 +29,7 @@ module div_even #(
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
       clk_out <= 1'b0;
-    end else if (cnt == HALF - 1) begin
+    end else if (cnt == HALF_LAST) begin
       clk_out <= ~clk_out;
     end
   end

@@ -12,6 +12,8 @@ module div_odd #(
   localparam integer CNT_W = $clog2(N);
   localparam integer MID   = (N - 1) / 2;
   localparam integer LAST  = N - 1;
+  localparam [CNT_W-1:0] MID_COUNT  = MID[CNT_W-1:0];
+  localparam [CNT_W-1:0] LAST_COUNT = LAST[CNT_W-1:0];
 
   reg [CNT_W-1:0] cnt;
   reg clk_p;
@@ -21,14 +23,14 @@ module div_odd #(
     if (!i_rstn) begin
       cnt <= 0;
     end else begin
-      cnt <= (cnt == LAST) ? 0 : cnt + 1'b1;
+      cnt <= (cnt == LAST_COUNT) ? 0 : cnt + 1'b1;
     end
   end
 
   always @(posedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
       clk_p <= 1'b0;
-    end else if (cnt == MID || cnt == LAST) begin
+    end else if (cnt == MID_COUNT || cnt == LAST_COUNT) begin
       clk_p <= ~clk_p;
     end
   end
@@ -36,7 +38,7 @@ module div_odd #(
   always @(negedge i_clk or negedge i_rstn) begin
     if (!i_rstn) begin
       clk_n <= 1'b0;
-    end else if (cnt == MID || cnt == LAST) begin
+    end else if (cnt == MID_COUNT || cnt == LAST_COUNT) begin
       clk_n <= ~clk_n;
     end
   end
